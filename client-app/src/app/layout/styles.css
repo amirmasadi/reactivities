@@ -5,9 +5,157 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Navbar */
+.navbar {
+  padding-bottom: 1px;
+  background-color: #fff;
+  border-bottom: solid 1px #e8e8e8;
+  box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.12),
+    0 6px 16px -11px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  margin-bottom: 20px;
+  z-index: 99990;
+}
+
+.nav-header {
+  border-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo a {
+  display: inline-block;
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+.navbar-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.navbar-menu .ant-menu-horizontal {
+  border-bottom: 0;
+}
+
+.navbar-menu .leftMenu {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+
+}
+
+.navbar-menu .rightMenu {
+  flex: 0;
+}
+
+.menuButton {
+  height: 32px;
+  display: none;
+  background: none;
+  margin-right: 15px;
+}
+
+.username {
+  display: none;
+  margin-left: 8px;
+}
+
+@media (max-width: 767px) {
+  .menuButton {
+    display: block;
+    margin-right: 15px;
+  }
+
+  .navbar-menu{
+    flex: 0;
+  }
+
+  .navbar-menu
+  .leftMenu,
+  .rightMenu {
+    display: none;
+  }
+
+  .username {
+    display: inline-block;
+  }
+}
+/* Navbar End */
+
+
+/* Container */
+.container{
+  position:relative;
+  margin: 0px auto !important;
+  padding-right:15px;
+  padding-left:15px
+}
+@media (min-width: 476px){
+  .container{
+    padding-right:15px;
+    padding-left:15px
+  }
+}
+@media (min-width: 768px){
+  .container{
+    padding-right:15px;
+    padding-left:15px
+  }
+}
+@media (min-width: 992px){
+  .container{
+    padding-right:15px;
+    padding-left:15px
+  }
+}
+@media (min-width: 1200px){
+  .container{
+    padding-right:15px;
+    padding-left:15px
+  }
+}
+@media (min-width: 476px){
+  .container{
+    width:100%
+  }
+}
+@media (min-width: 768px){
+  .container{
+    width:720px;
+    max-width:100%
+  }
+}
+@media (min-width: 992px){
+  .container{
+    width:960px;
+    max-width:100%
+  }
+}
+@media (min-width: 1200px){
+  .container{
+    width:1140px;
+    max-width:100%
+  }
+}
+@media (min-width: 1400px){
+  .container{
+    width:1340px;
+    max-width:100%
+  }
+}
+/* Conteiner End */
