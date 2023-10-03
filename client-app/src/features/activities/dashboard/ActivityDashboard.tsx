@@ -14,6 +14,8 @@ interface Props {
   handleCloseForm: () => void;
   crateAndEditActivityHandler: (activity: IActivity) => void;
   deleteActivityHandler: (id: string) => void;
+  loading : boolean
+  submitting : boolean
 }
 
 export default function ActiviryDashboard({
@@ -26,6 +28,8 @@ export default function ActiviryDashboard({
   handleCloseForm,
   crateAndEditActivityHandler,
   deleteActivityHandler,
+  loading,
+  submitting
 }: Props) {
   return (
     <Row className="container" gutter={16}>
@@ -34,6 +38,8 @@ export default function ActiviryDashboard({
           activities={activities}
           handleSelectedActivity={handleSelectedActivity}
           deleteActivityHandler={deleteActivityHandler}
+          loading={loading}
+          submitting={submitting}
         />
       </Col>
       <Col span={8}>
@@ -50,6 +56,7 @@ export default function ActiviryDashboard({
               handleCloseForm={handleCloseForm}
               activity={selectedActivity}
               crateAndEditActivityHandler={crateAndEditActivityHandler}
+              submitting={submitting}
             />
           )}
         </Space>

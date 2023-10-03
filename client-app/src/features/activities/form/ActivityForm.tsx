@@ -8,12 +8,14 @@ interface Props {
   handleCloseForm: () => void;
   activity: IActivity | undefined;
   crateAndEditActivityHandler: (activity: IActivity) => void;
+  submitting: boolean;
 }
 
 export default function ActivityForm({
   handleCloseForm,
   activity: selectedActivity,
-  crateAndEditActivityHandler
+  crateAndEditActivityHandler,
+  submitting,
 }: Props) {
   const initialState =
     selectedActivity !== undefined
@@ -107,7 +109,11 @@ export default function ActivityForm({
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" onClick={formSubmitHnadler}>
+          <Button
+            type="primary"
+            onClick={formSubmitHnadler}
+            disabled={submitting}
+          >
             Submit
           </Button>
         </Form.Item>

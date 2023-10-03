@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import TopMenu from "./topNavbar/TopMenu";
 import IActivity from "../Models/activity";
 import ActiviryDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import { v4 as uuid } from "uuid";
+import agent from "../api/agent";
 
 function App() {
   const [activities, setActivities] = useState<IActivity[]>([]);
@@ -11,13 +11,14 @@ function App() {
     IActivity | undefined
   >(undefined);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setloading] = useState<boolean>(true);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    axios
-      .get<IActivity[]>("http://localhost:5000/api/Activities")
-      .then((res) => {
-        setActivities(res.data);
-      });
+    agent.Activities.list().then((res) => {
+      setActivities(res);
+      setloading(false);
+    });
   }, []);
 
   function handleSelectedActivity(id: String): void {
@@ -38,18 +39,34 @@ function App() {
   }
 
   function crateAndEditActivityHandler(activity: IActivity): void {
-    activity.id
-      ? setActivities([
+    setSubmitting(true);
+    if (activity.id) {
+      agent.Activities.update(activity).then(() => {
+        setActivities([
           ...activities.filter((itm) => itm.id !== activity.id),
           activity,
-        ])
-      : setActivities([...activities, { ...activity, id: uuid() }]);
-    handleCloseForm();
-    setSelectedActivity(activity);
+        ]);
+        setSelectedActivity(activity);
+        setShowForm(false);
+        setSubmitting(false);
+      });
+    } else {
+      activity.id = uuid();
+      agent.Activities.create(activity).then(() => {
+        setActivities([...activities, activity]);
+        setSelectedActivity(activity);
+        setShowForm(false);
+        setSubmitting(false);
+      });
+    }
   }
 
   function deleteActivityHandler(id: string) {
-    setActivities([...activities.filter((itm) => itm.id !== id)]);
+    setSubmitting(true);
+    agent.Activities.delete(id).then(() => {
+      setActivities([...activities.filter((itm) => itm.id !== id)]);
+      setSubmitting(false);
+    });
   }
 
   return (
@@ -65,6 +82,8 @@ function App() {
         handleCloseForm={handleCloseForm}
         crateAndEditActivityHandler={crateAndEditActivityHandler}
         deleteActivityHandler={deleteActivityHandler}
+        loading={loading}
+        submitting={submitting}
       />
     </>
   );

@@ -2,6 +2,8 @@ import { Avatar, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import { UserOutlined } from "@ant-design/icons";
 import IActivity from "../../../app/Models/activity";
+import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+
 
 interface Props {
   activity: IActivity | undefined;
@@ -23,8 +25,8 @@ export default function ActivityDetail({
         />
       }
       actions={[
-        <span onClick={() => handleOpenForm(activity.id)}>edit</span>,
-        <span onClick={() => handleCancelSelectActivity()}>Cancel</span>,
+        <EditOutlined onClick={() => handleOpenForm(activity.id)}/>,
+        <EyeInvisibleOutlined onClick={() => handleCancelSelectActivity()}/>,
       ]}
     >
       <Meta
