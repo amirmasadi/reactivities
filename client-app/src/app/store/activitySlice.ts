@@ -11,6 +11,7 @@ export interface ActivitySlice {
   selectedActivity: IActivity | undefined;
 
   getActivities: () => void;
+  getActivitiesByDate: () => IActivity[];
   setSubmitting: (isSubmitting: boolean) => void;
   handleSelectedActivity: (id: string) => void;
   handleCancelSelectActivity: () => void;
@@ -36,6 +37,11 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
       set({ initialLoading: false });
     }
   },
+
+  getActivitiesByDate: () =>
+    get().activities.sort(
+      (a: IActivity, b: IActivity) => Date.parse(a.date) - Date.parse(b.date)
+    ),
 
   setSubmitting: (isSubmitting: boolean) => set({ submitting: isSubmitting }),
 

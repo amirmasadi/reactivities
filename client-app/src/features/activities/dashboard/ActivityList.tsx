@@ -13,7 +13,7 @@ import useBoundStore from "../../../app/store/useBoundStore";
 export default function ActivityList() {
   const [target, setTarget] = useState("");
   const {
-    activities,
+    getActivitiesByDate,
     initialLoading,
     submitting,
     deleteActivityHandler,
@@ -30,7 +30,7 @@ export default function ActivityList() {
   return (
     <Row gutter={[24, 24]}>
       {!initialLoading
-        ? activities.map((activity) => (
+        ? getActivitiesByDate().map((activity) => (
             <Col xs={24} md={12} lg={8} key={activity.id}>
               <Card
                 cover={
