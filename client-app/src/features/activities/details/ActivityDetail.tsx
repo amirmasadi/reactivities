@@ -1,43 +1,38 @@
 import { Avatar, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import { UserOutlined } from "@ant-design/icons";
-import IActivity from "../../../app/Models/activity";
 import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import useBoundStore from "../../../app/store/useBoundStore";
 
+export default function ActivityDetail() {
+  const { selectedActivity, handleOpenForm, handleCancelSelectActivity } =
+    useBoundStore((state) => state);
 
-interface Props {
-  activity: IActivity | undefined;
-  handleCancelSelectActivity: () => void;
-  handleOpenForm: (id: string) => void;
-}
-
-export default function ActivityDetail({
-  activity,
-  handleCancelSelectActivity,
-  handleOpenForm,
-}: Props) {
-  return activity ? (
+  return selectedActivity ? (
     <Card
       cover={
         <img
-          alt={activity.category}
-          src={`../../../assests/categoryImages/${activity.category}.jpg`}
+          alt={selectedActivity.category}
+          src={`../../../assests/categoryImages/${selectedActivity.category}.jpg`}
         />
       }
       actions={[
-        <EditOutlined onClick={() => handleOpenForm(activity.id)}/>,
-        <EyeInvisibleOutlined onClick={() => handleCancelSelectActivity()}/>,
+        <EditOutlined onClick={() => handleOpenForm(selectedActivity.id)} />,
+        <EyeInvisibleOutlined onClick={() => handleCancelSelectActivity()} />,
       ]}
     >
       <Meta
         avatar={<Avatar icon={<UserOutlined />} />}
-        title={`${activity.title} / ${activity.category}`}
-        description={`${new Date(activity.date).toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })} in ${activity.city}, ${activity.venue}`}
+        title={`${selectedActivity.title} / ${selectedActivity.category}`}
+        description={`${new Date(selectedActivity.date).toLocaleDateString(
+          "en-US",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }
+        )} in ${selectedActivity.city}, ${selectedActivity.venue}`}
       />
     </Card>
   ) : (

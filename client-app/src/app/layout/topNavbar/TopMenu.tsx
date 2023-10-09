@@ -3,12 +3,9 @@ import React, { useEffect, useState } from "react";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
 import { MenuOutlined } from "@ant-design/icons";
+import useBoundStore from "../../store/useBoundStore";
 
-interface Props {
-  handleOpenForm: (id?: string) => void;
-}
-
-const TopMenu: React.FC<Props> = ({ handleOpenForm }) => {
+const TopMenu: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const showDrawer = () => {
     setVisible(!visible);
@@ -19,7 +16,7 @@ const TopMenu: React.FC<Props> = ({ handleOpenForm }) => {
   useEffect(() => {
     setVisible(false);
   }, []);
-
+  const handleOpenForm = useBoundStore((state) => state.handleOpenForm);
   return (
     <nav className="navbar">
       <div className="nav-header container">
@@ -28,7 +25,7 @@ const TopMenu: React.FC<Props> = ({ handleOpenForm }) => {
         </div>
         <div className="navbar-menu">
           <div className="leftMenu">
-            <LeftMenu mode={"horizontal"} handleOpenForm={handleOpenForm}/>
+            <LeftMenu mode={"horizontal"} handleOpenForm={handleOpenForm} />
           </div>
           <Button className="menuButton" type="text" onClick={showDrawer}>
             <MenuOutlined />
@@ -45,7 +42,7 @@ const TopMenu: React.FC<Props> = ({ handleOpenForm }) => {
             open={visible}
             style={{ zIndex: 99999 }}
           >
-            <LeftMenu mode={"inline"} handleOpenForm={handleOpenForm}/>
+            <LeftMenu mode={"inline"} handleOpenForm={handleOpenForm} />
             <RightMenu mode={"inline"} />
           </Drawer>
         </div>

@@ -1,6 +1,5 @@
 import { Avatar, Card, Col, Row, Skeleton } from "antd";
 import Meta from "antd/es/card/Meta";
-import IActivity from "../../../app/Models/activity";
 import { UserOutlined } from "@ant-design/icons";
 import CardSkeleton from "../../../app/layout/CardSkeleton";
 import { SyntheticEvent, useState } from "react";
@@ -9,23 +8,17 @@ import {
   DeleteOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
+import useBoundStore from "../../../app/store/useBoundStore";
 
-interface Props {
-  activities: IActivity[];
-  handleSelectedActivity: (id: string) => void;
-  deleteActivityHandler: (id: string) => void;
-  loading: boolean;
-  submitting: boolean;
-}
-
-export default function ActivityList({
-  activities,
-  handleSelectedActivity,
-  deleteActivityHandler,
-  loading,
-  submitting,
-}: Props) {
+export default function ActivityList() {
   const [target, setTarget] = useState("");
+  const {
+    activities,
+    initialLoading,
+    submitting,
+    deleteActivityHandler,
+    handleSelectedActivity,
+  } = useBoundStore((state) => state);
   function handleDeleteActivity(
     e: SyntheticEvent<HTMLSpanElement>,
     id: string
@@ -33,9 +26,10 @@ export default function ActivityList({
     setTarget(e.currentTarget.attributes[2].value);
     deleteActivityHandler(id);
   }
+
   return (
     <Row gutter={[24, 24]}>
-      {!loading
+      {!initialLoading
         ? activities.map((activity) => (
             <Col xs={24} md={12} lg={8} key={activity.id}>
               <Card
@@ -60,7 +54,7 @@ export default function ActivityList({
                   />,
                 ]}
               >
-                <Skeleton loading={loading} avatar active>
+                <Skeleton loading={initialLoading} avatar active>
                   <Meta
                     avatar={<Avatar icon={<UserOutlined />} />}
                     title={`${activity.title} / ${activity.category}`}

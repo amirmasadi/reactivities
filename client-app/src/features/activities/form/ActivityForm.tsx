@@ -1,22 +1,16 @@
 import { Button, Card, DatePicker, Form, Input, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import IActivity from "../../../app/Models/activity";
 import { ChangeEvent, useState } from "react";
 import * as dayjs from "dayjs";
+import useBoundStore from "../../../app/store/useBoundStore";
 
-interface Props {
-  handleCloseForm: () => void;
-  activity: IActivity | undefined;
-  crateAndEditActivityHandler: (activity: IActivity) => void;
-  submitting: boolean;
-}
-
-export default function ActivityForm({
-  handleCloseForm,
-  activity: selectedActivity,
-  crateAndEditActivityHandler,
-  submitting,
-}: Props) {
+export default function ActivityForm() {
+  const {
+    submitting,
+    handleCloseForm,
+    selectedActivity,
+    crateAndEditActivityHandler,
+  } = useBoundStore((state) => state);
   const initialState =
     selectedActivity !== undefined
       ? selectedActivity
