@@ -1,7 +1,24 @@
 import React, { useEffect } from "react";
 import TopMenu from "./topNavbar/TopMenu";
-import ActiviryDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import useBoundStore from "../store/useBoundStore";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import Home from "../pages/home";
+import Activities from "../pages/activities";
+import CreateForm from "../pages/createForm";
+import ErrorPage from "../pages/error";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: Layout,
+    children: [
+      { path: "/", Component: Home },
+      { path: "/activities", Component: Activities },
+      { path: "/form", Component: CreateForm },
+    ],
+    errorElement: <ErrorPage />,
+  },
+]);
 
 function App() {
   const { getActivities } = useBoundStore((state) => state);
@@ -12,8 +29,15 @@ function App() {
 
   return (
     <>
+      <RouterProvider router={router} />
+    </>
+  );
+}
+function Layout() {
+  return (
+    <>
       <TopMenu />
-      <ActiviryDashboard />
+      <Outlet />
     </>
   );
 }
