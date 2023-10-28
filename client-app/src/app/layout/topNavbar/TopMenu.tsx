@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import LeftMenu from "./LeftMenu";
 import RightMenu from "./RightMenu";
 import { MenuOutlined } from "@ant-design/icons";
-import useBoundStore from "../../store/useBoundStore";
+import { useLocation } from "react-router-dom";
 
 const TopMenu: React.FC = () => {
   const [visible, setVisible] = useState(false);
@@ -11,11 +11,12 @@ const TopMenu: React.FC = () => {
     setVisible(!visible);
   };
 
-  // let { pathname: location } = useLocation();
+  let { pathname: location } = useLocation();
 
   useEffect(() => {
     setVisible(false);
-  }, []);
+  }, [location]);
+  
   return (
     <nav className="navbar">
       <div className="nav-header container">
