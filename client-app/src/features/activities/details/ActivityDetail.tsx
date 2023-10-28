@@ -3,13 +3,14 @@ import Meta from "antd/es/card/Meta";
 import { UserOutlined } from "@ant-design/icons";
 import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import useBoundStore from "../../../app/store/useBoundStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import CardSkeleton from "../../../app/layout/CardSkeleton";
 
 export default function ActivityDetail() {
   const { selectedActivity, getActivity } = useBoundStore((state) => state);
   const { activityId } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     if (activityId) getActivity(activityId);
   }, [activityId, getActivity]);
@@ -22,7 +23,12 @@ export default function ActivityDetail() {
           src={`../../../assests/categoryImages/${selectedActivity.category}.jpg`}
         />
       }
-      actions={[<EditOutlined />, <EyeInvisibleOutlined />]}
+      actions={[
+        <EditOutlined
+          onClick={() => navigate("/edit/" + selectedActivity.id)}
+        />,
+        <EyeInvisibleOutlined />,
+      ]}
     >
       <Meta
         avatar={<Avatar icon={<UserOutlined />} />}

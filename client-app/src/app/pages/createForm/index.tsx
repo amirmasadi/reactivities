@@ -1,3 +1,5 @@
+import ActivityForm from "../../../features/activities/form/ActivityForm";
+
 export default function CreateForm() {
-  return <h1>This is CreateForm page</h1>;
+  return <ActivityForm />;
 }

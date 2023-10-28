@@ -1,7 +1,6 @@
 import { StateCreator } from "zustand";
 import IActivity from "../Models/activity";
 import agent from "../api/agent";
-import { v4 as uuid } from "uuid";
 
 export interface ActivitySlice {
   activities: IActivity[];
@@ -11,10 +10,11 @@ export interface ActivitySlice {
   selectedActivity: IActivity | undefined;
 
   getActivities: () => void;
-  getActivity: (id: string) => void;
+  getActivity: (id: string) => Promise<IActivity | undefined>;
   getActivitiesByDate: () => IActivity[];
   setSubmitting: (isSubmitting: boolean) => void;
-  crateAndEditActivityHandler: (activity: IActivity) => void;
+  createActivity: (activity: IActivity) => Promise<IActivity | undefined>;
+  updateActivity: (activity: IActivity) => Promise<IActivity | undefined>;
   deleteActivityHandler: (id: string) => void;
 }
 
@@ -34,11 +34,13 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
       set({ initialLoading: false });
     }
   },
+
   getActivity: async (id) => {
     if (get().activities.length === 0) {
       try {
         const response = await agent.Activities.details(id);
         set({ selectedActivity: response, initialLoading: false });
+        return response;
       } catch (error) {
         console.log(
           "Something went wrong whene loading activitie with id:" + id + error
@@ -51,6 +53,7 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
           (activity) => activity.id === id
         ),
       }));
+      return get().activities.find((activity) => activity.id === id);
     }
   },
 
@@ -61,26 +64,9 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
 
   setSubmitting: (isSubmitting: boolean) => set({ submitting: isSubmitting }),
 
-  crateAndEditActivityHandler: async (activity: IActivity) => {
-    if (activity.id) {
-      try {
-        get().setSubmitting(true);
-        await agent.Activities.update(activity);
-        set((state) => {
-          state.setSubmitting(false);
-          return {
-            activities: [
-              ...state.activities.filter((itm) => itm.id !== activity.id),
-              activity,
-            ],
-          };
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      activity.id = uuid();
-      get().setSubmitting(true);
+  createActivity: async (activity: IActivity) => {
+    get().setSubmitting(true);
+    try {
       await agent.Activities.create(activity);
       set((state) => {
         state.setSubmitting(false);
@@ -88,6 +74,30 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
           activities: [...state.activities, activity],
         };
       });
+      return activity;
+    } catch (error) {
+      console.log(error);
+      get().setSubmitting(false);
+    }
+  },
+
+  updateActivity: async (activity: IActivity) => {
+    try {
+      get().setSubmitting(true);
+      await agent.Activities.update(activity);
+      set((state) => {
+        state.setSubmitting(false);
+        return {
+          activities: [
+            ...state.activities.filter((itm) => itm.id !== activity.id),
+            activity,
+          ],
+        };
+      });
+      return activity;
+    } catch (error) {
+      console.log(error);
+      get().setSubmitting(false);
     }
   },
 

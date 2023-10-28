@@ -17,6 +17,7 @@ const router = createBrowserRouter([
       { path: "/activities", Component: Activities },
       { path: "/activities/:activityId", Component: ActivityDetail },
       { path: "/form", Component: CreateForm },
+      { path: "/edit/:activityId", Component: CreateForm },
     ],
     errorElement: <ErrorPage />,
   },

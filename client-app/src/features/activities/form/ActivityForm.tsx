@@ -1,32 +1,56 @@
 import { Button, Card, DatePicker, Form, Input, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import * as dayjs from "dayjs";
 import useBoundStore from "../../../app/store/useBoundStore";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 
 export default function ActivityForm() {
-  const {
-    submitting,
-    selectedActivity,
-    crateAndEditActivityHandler,
-  } = useBoundStore((state) => state);
-  const initialState =
-    selectedActivity !== undefined
-      ? selectedActivity
-      : {
-          id: "",
-          title: "",
-          description: "",
-          category: "",
-          date: new Date().toISOString(),
-          city: "",
-          venue: "",
-        };
+  const [activity, setActivity] = useState({
+    id: "",
+    title: "",
+    description: "",
+    category: "",
+    date: new Date().toISOString(),
+    city: "",
+    venue: "",
+  });
 
-  const [activity, setActivity] = useState(initialState);
+  const { getActivity, submitting, updateActivity, createActivity } =
+    useBoundStore((state) => state);
+  const { activityId } = useParams();
+  let { pathname: location } = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setActivity({
+      id: "",
+      title: "",
+      description: "",
+      category: "",
+      date: new Date().toISOString(),
+      city: "",
+      venue: "",
+    });
+  }, [location]);
+
+  useEffect(() => {
+    if (activityId)
+      getActivity(activityId).then((activity) => setActivity(activity!));
+  }, [activityId, getActivity]);
 
   function formSubmitHnadler() {
-    crateAndEditActivityHandler(activity);
+    if (activity.id === "") {
+      activity.id = uuid();
+      createActivity(activity).then(() =>
+        navigate("/activities/" + activity.id)
+      );
+    } else {
+      updateActivity(activity).then(() =>
+        navigate("/activities/" + activity.id)
+      );
+    }
   }
 
   function inputChagneHandler(
@@ -111,9 +135,7 @@ export default function ActivityForm() {
           </Button>
         </Form.Item>
         <Form.Item>
-          <Button type="default">
-            Cancel
-          </Button>
+          <Button type="default">Cancel</Button>
         </Form.Item>
       </Form>
     </Card>
