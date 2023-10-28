@@ -6,6 +6,7 @@ import Home from "../pages/home";
 import Activities from "../pages/activities";
 import CreateForm from "../pages/createForm";
 import ErrorPage from "../pages/error";
+import ActivityDetail from "../../features/activities/details/ActivityDetail";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", Component: Home },
       { path: "/activities", Component: Activities },
+      { path: "/activities/:activityId", Component: ActivityDetail },
       { path: "/form", Component: CreateForm },
     ],
     errorElement: <ErrorPage />,

@@ -11,12 +11,9 @@ export interface ActivitySlice {
   selectedActivity: IActivity | undefined;
 
   getActivities: () => void;
+  getActivity: (id: string) => void;
   getActivitiesByDate: () => IActivity[];
   setSubmitting: (isSubmitting: boolean) => void;
-  handleSelectedActivity: (id: string) => void;
-  handleCancelSelectActivity: () => void;
-  handleOpenForm: (id?: string) => void;
-  handleCloseForm: () => void;
   crateAndEditActivityHandler: (activity: IActivity) => void;
   deleteActivityHandler: (id: string) => void;
 }
@@ -37,6 +34,25 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
       set({ initialLoading: false });
     }
   },
+  getActivity: async (id) => {
+    if (get().activities.length === 0) {
+      try {
+        const response = await agent.Activities.details(id);
+        set({ selectedActivity: response, initialLoading: false });
+      } catch (error) {
+        console.log(
+          "Something went wrong whene loading activitie with id:" + id + error
+        );
+        set({ initialLoading: false });
+      }
+    } else {
+      set((state) => ({
+        selectedActivity: state.activities.find(
+          (activity) => activity.id === id
+        ),
+      }));
+    }
+  },
 
   getActivitiesByDate: () =>
     get().activities.sort(
@@ -45,31 +61,12 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
 
   setSubmitting: (isSubmitting: boolean) => set({ submitting: isSubmitting }),
 
-  handleSelectedActivity: (id: string) =>
-    set((state) => ({
-      selectedActivity: state.activities.find((activity) => activity.id === id),
-    })),
-
-  handleCancelSelectActivity: () => set({ selectedActivity: undefined }),
-
-  handleOpenForm: (id?: string) =>
-    set((state) => {
-      id
-        ? state.handleSelectedActivity(id)
-        : state.handleCancelSelectActivity();
-      return { showForm: true };
-    }),
-
-  handleCloseForm: () => set({ showForm: false }),
-
   crateAndEditActivityHandler: async (activity: IActivity) => {
     if (activity.id) {
       try {
         get().setSubmitting(true);
         await agent.Activities.update(activity);
         set((state) => {
-          state.handleSelectedActivity(activity.id);
-          state.handleCloseForm();
           state.setSubmitting(false);
           return {
             activities: [
@@ -86,8 +83,6 @@ export const createActivitySlice: StateCreator<ActivitySlice> = (set, get) => ({
       get().setSubmitting(true);
       await agent.Activities.create(activity);
       set((state) => {
-        state.handleSelectedActivity(activity.id);
-        state.handleCloseForm();
         state.setSubmitting(false);
         return {
           activities: [...state.activities, activity],

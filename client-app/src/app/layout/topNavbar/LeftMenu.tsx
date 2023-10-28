@@ -7,7 +7,6 @@ export type MenuMode = "horizontal" | "vertical" | "inline";
 
 interface Props {
   mode: MenuMode;
-  handleOpenForm: (id?: string) => void;
 }
 
 const items: MenuProps["items"] = [
@@ -25,12 +24,11 @@ const items: MenuProps["items"] = [
   },
 ];
 
-const LeftMenu = ({ mode, handleOpenForm }: Props) => {
+const LeftMenu = ({ mode }: Props) => {
   const [current, setCurrent] = useState("Activities");
   const navigate = useNavigate(); 
 
   const onClick: MenuProps["onClick"] = (e) => {
-    handleOpenForm();
     navigate(e.key);
     setCurrent(e.key);
   };

@@ -7,7 +7,6 @@ import useBoundStore from "../../../app/store/useBoundStore";
 export default function ActivityForm() {
   const {
     submitting,
-    handleCloseForm,
     selectedActivity,
     crateAndEditActivityHandler,
   } = useBoundStore((state) => state);
@@ -112,7 +111,7 @@ export default function ActivityForm() {
           </Button>
         </Form.Item>
         <Form.Item>
-          <Button type="default" onClick={() => handleCloseForm()}>
+          <Button type="default">
             Cancel
           </Button>
         </Form.Item>

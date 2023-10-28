@@ -16,7 +16,6 @@ const TopMenu: React.FC = () => {
   useEffect(() => {
     setVisible(false);
   }, []);
-  const handleOpenForm = useBoundStore((state) => state.handleOpenForm);
   return (
     <nav className="navbar">
       <div className="nav-header container">
@@ -25,7 +24,7 @@ const TopMenu: React.FC = () => {
         </div>
         <div className="navbar-menu">
           <div className="leftMenu">
-            <LeftMenu mode={"horizontal"} handleOpenForm={handleOpenForm} />
+            <LeftMenu mode={"horizontal"} />
           </div>
           <Button className="menuButton" type="text" onClick={showDrawer}>
             <MenuOutlined />
@@ -42,7 +41,7 @@ const TopMenu: React.FC = () => {
             open={visible}
             style={{ zIndex: 99999 }}
           >
-            <LeftMenu mode={"inline"} handleOpenForm={handleOpenForm} />
+            <LeftMenu mode={"inline"} />
             <RightMenu mode={"inline"} />
           </Drawer>
         </div>

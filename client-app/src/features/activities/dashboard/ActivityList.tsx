@@ -9,15 +9,16 @@ import {
   LoadingOutlined,
 } from "@ant-design/icons";
 import useBoundStore from "../../../app/store/useBoundStore";
+import { useNavigate } from "react-router-dom";
 
 export default function ActivityList() {
   const [target, setTarget] = useState("");
+  const navigate = useNavigate();
   const {
     getActivitiesByDate,
     initialLoading,
     submitting,
     deleteActivityHandler,
-    handleSelectedActivity,
   } = useBoundStore((state) => state);
   function handleDeleteActivity(
     e: SyntheticEvent<HTMLSpanElement>,
@@ -50,7 +51,7 @@ export default function ActivityList() {
                     />
                   ),
                   <EyeOutlined
-                    onClick={() => handleSelectedActivity(activity.id)}
+                    onClick={() => navigate("/activities/" + activity.id)}
                   />,
                 ]}
               >
