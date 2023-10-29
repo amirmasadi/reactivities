@@ -135,7 +135,7 @@ export default function ActivityForm() {
           </Button>
         </Form.Item>
         <Form.Item>
-          <Button type="default">Cancel</Button>
+          <Button type="default" onClick={()=> navigate("/activities")}>Cancel</Button>
         </Form.Item>
       </Form>
     </Card>
